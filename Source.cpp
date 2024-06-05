@@ -1,34 +1,62 @@
-﻿#include <SFML/Graphics.hpp>
-#include <iostream>
+﻿#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/OpenGL.hpp>
+
+using namespace sf;
 
 int main()
 { // Начало окна
 
-	sf::RenderWindow window(sf::VideoMode(1024, 760), "Galaga");
+	RenderWindow window(VideoMode(1024, 760), "Galaga");
 
-	sf::Texture texture;
-	if (!texture.loadFromFile("/png-transparent-bomber-plane-aircraft-jet-airplane-war-army-pixel-pixel-art.png"))
-	{
-		std::cout << "err";
-	}
+	Image heroimage;
+	heroimage.loadFromFile("plane.png");
+
+	Texture herotexture;
+	herotexture.loadFromImage(heroimage);
+
+	Sprite herosprite;
+	herosprite.setTexture(herotexture);
+	herosprite.setPosition(470, 680);
+	herosprite.setScale(0.1, 0.1);
+
+	//////////////////////////////////////////////////////////////////
 	
+	Image monsterimage;
+	monsterimage.loadFromFile("monster.png");
+
+	Texture monstertexture;
+	monstertexture.loadFromImage(monsterimage);
+
+	Sprite monstersprite;
+	monstersprite.setTexture(monstertexture);
+	monstersprite.setPosition(300, 300);
+	monstersprite.setScale(0.1, 0.1);
 	
+	Clock clock;
+
+	
+
+
 	while (window.isOpen())
 	{
-		sf::Event event;  
+		Event event;
 		while (window.pollEvent(event))
 		{
-			
-		sf::Sprite sprite;
-		sprite.setTexture(texture);
-		window.draw(sprite);
-			
-		if (event.type == sf::Event::Closed)
+			if (event.type == Event::Closed)
 				window.close();
-		}
-		window.clear();
-		window.display(); 
+			}
+
+		if (Keyboard::isKeyPressed(Keyboard::Left)) { herosprite.move(-0.3, 0); } // Первая координата отрицательна => идем влево
+		if (Keyboard::isKeyPressed(Keyboard::Right)) { herosprite.move(0.3, 0); }
+
+			window.clear();
+			window.draw(herosprite);
+			window.draw(monstersprite);
+			window.display();
 
 	} // Конец окна
+
 	return 0;
 }
