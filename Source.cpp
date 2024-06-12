@@ -1,30 +1,45 @@
-п»ї#include <iostream>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
-#include <iostream>
 #include <vector>
 #include <list>
 
 using namespace sf;
 
 int main()
-{ // РќР°С‡Р°Р»Рѕ РѕРєРЅР°
+{ // Начало окна
 
-	RenderWindow window(VideoMode(1280,800), "Galaga");
+	const float WindowWidth = 1280.0;
+	const float WindowHeigth = 800.0;
+	float charPosX = 410.0;
+
+
+	RenderWindow window(VideoMode(WindowWidth, WindowHeigth), "Galaga");
 
 	Font font;
 	if (!font.loadFromFile("ofont.ru_Bowler.ttf"))
 	{
-		
+
 	}
 
-	Image BulletImage;//РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ РїСѓР»Рё
-	BulletImage.loadFromFile("bullet.png"); //Р·Р°РіСЂСѓР·РёР»Рё РєР°СЂС‚РёРЅРєСѓ РІ РѕР±СЉРµРєС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
-	BulletImage.createMaskFromColor(Color(0, 0, 0)); //РјР°СЃРєР° РґР»СЏ РїСѓР»Рё РїРѕ С‡РµСЂРЅРѕРјСѓ С†РІРµС‚Сѓ
+	Image bulletimage;//изображение для пули
+	bulletimage.loadFromFile("bullet.png"); //загрузили картинку в объект изображения
+	bulletimage.createMaskFromColor(Color(0, 0, 0)); //маска для пули по черному цвету
+	
+	Texture bullettexture;
+	bullettexture.loadFromImage(bulletimage);
+
+	Sprite bulletsprite;
+	bulletsprite.setTexture(bullettexture);
+	bulletsprite.setTexture(bullettexture);
+	bulletsprite.setPosition(410, 650);
+	bulletsprite.setScale(0.035, 0.035);
+
+
 
 	Text text;
-	text.setFont(font); 
+	text.setFont(font);
 	text.setString("GALAGA"); //name
 	text.setPosition(995, 10); // position
 	text.setCharacterSize(50); // size in pixels
@@ -32,6 +47,8 @@ int main()
 	text.setStyle(Text::Bold | Text::Underlined); //style
 
 	///////////////////////////////////////////////////////////////////
+
+
 
 	RectangleShape line(Vector2f(1000, 10));
 	line.rotate(90);
@@ -48,11 +65,14 @@ int main()
 
 	Sprite herosprite;
 	herosprite.setTexture(herotexture);
-	herosprite.setPosition(520, 710);
+	herosprite.setPosition(410, 710);
 	herosprite.setScale(0.13, 0.13);
 
 	//////////////////////////////////////////////////////////////////
-	
+
+	float monsterPosX = 520.0;
+	float monsterPosY = 300.0;
+
 	Image monsterimage;
 	monsterimage.loadFromFile("monster.png");
 
@@ -133,8 +153,6 @@ int main()
 
 	Clock clock;
 
-
-
 	while (window.isOpen())
 	{
 		Event event;
@@ -142,25 +160,34 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();
-			}
+		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Left)) { herosprite.move(-0.4, 0); } // РџРµСЂРІР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° РѕС‚СЂРёС†Р°С‚РµР»СЊРЅР° => РёРґРµРј РІР»РµРІРѕ
-		if (Keyboard::isKeyPressed(Keyboard::Right)) { herosprite.move(0.4, 0); }
+		if (((Keyboard::isKeyPressed(Keyboard::Left)) && (charPosX > 0))) { //Влево
+			herosprite.move(-0.4, 0);
+			charPosX -= 0.4;
+		}
+		if ((Keyboard::isKeyPressed(Keyboard::Right)) && (charPosX < 860)) { 
+			herosprite.move(0.4, 0);
+			charPosX += 0.4;
+		}
+		
 
+		window.clear();
+		if (Keyboard::isKeyPressed(Keyboard::Space)) {
+			window.draw(bulletsprite);
+		}
+		window.draw(text);
+		window.draw(line);
+		window.draw(herosprite);
+		window.draw(monstersprite);
+		window.draw(monstersprite1);
+		window.draw(monstersprite2);
+		window.draw(monstersprite3);
+		window.draw(monstersprite4);
+		window.draw(monstersprite5);
+		window.display();
 
-			window.clear();
-			window.draw(text);
-			window.draw(line);
-			window.draw(herosprite);
-			window.draw(monstersprite);
-			window.draw(monstersprite1);
-			window.draw(monstersprite2);
-			window.draw(monstersprite3);
-			window.draw(monstersprite4);
-			window.draw(monstersprite5);
-			window.display();
-
-	} // РљРѕРЅРµС† РѕРєРЅР°
+	} // Конец окна
 
 	return 0;
 }
