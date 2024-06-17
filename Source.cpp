@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
@@ -8,12 +8,12 @@
 using namespace sf;
 
 int main()
-{ // Íà÷àëî îêíà
+{ // ÃÃ Ã·Ã Ã«Ã® Ã®ÃªÃ­Ã 
 
 	const float WindowWidth = 1280.0;
 	const float WindowHeigth = 800.0;
 	float charPosX = 410.0;
-
+	float PlanePosX = 410.0;
 
 	RenderWindow window(VideoMode(WindowWidth, WindowHeigth), "Galaga");
 
@@ -23,18 +23,8 @@ int main()
 
 	}
 
-	Image bulletimage;//èçîáðàæåíèå äëÿ ïóëè
-	bulletimage.loadFromFile("bullet.png"); //çàãðóçèëè êàðòèíêó â îáúåêò èçîáðàæåíèÿ
-	bulletimage.createMaskFromColor(Color(0, 0, 0)); //ìàñêà äëÿ ïóëè ïî ÷åðíîìó öâåòó
-	
-	Texture bullettexture;
-	bullettexture.loadFromImage(bulletimage);
-
-	Sprite bulletsprite;
-	bulletsprite.setTexture(bullettexture);
-	bulletsprite.setTexture(bullettexture);
-	bulletsprite.setPosition(410, 650);
-	bulletsprite.setScale(0.035, 0.035);
+	float BulletPosX = 440.0;
+	float BulletPosY = 680.0;
 
 
 
@@ -65,8 +55,26 @@ int main()
 
 	Sprite herosprite;
 	herosprite.setTexture(herotexture);
-	herosprite.setPosition(410, 710);
+	herosprite.setPosition(PlanePosX, 710);
 	herosprite.setScale(0.13, 0.13);
+
+
+	//////////////////////////////////////////////////////////////////////////
+
+	Image bulletimage;//Ã¨Ã§Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¥ Ã¤Ã«Ã¿ Ã¯Ã³Ã«Ã¨
+	bulletimage.loadFromFile("bullet.png"); //Ã§Ã Ã£Ã°Ã³Ã§Ã¨Ã«Ã¨ ÃªÃ Ã°Ã²Ã¨Ã­ÃªÃ³ Ã¢ Ã®Ã¡ÃºÃ¥ÃªÃ² Ã¨Ã§Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¿
+	bulletimage.createMaskFromColor(Color(0, 0, 0)); //Ã¬Ã Ã±ÃªÃ  Ã¤Ã«Ã¿ Ã¯Ã³Ã«Ã¨ Ã¯Ã® Ã·Ã¥Ã°Ã­Ã®Ã¬Ã³ Ã¶Ã¢Ã¥Ã²Ã³
+
+	Texture bullettexture;
+	bullettexture.loadFromImage(bulletimage);
+
+	Sprite bulletsprite;
+	bulletsprite.setTexture(bullettexture);
+	bulletsprite.setTexture(bullettexture);
+	bulletsprite.setPosition(BulletPosX, BulletPosY);
+	bulletsprite.setScale(0.030, 0.030);
+
+	
 
 	//////////////////////////////////////////////////////////////////
 
@@ -162,20 +170,34 @@ int main()
 				window.close();
 		}
 
-		if (((Keyboard::isKeyPressed(Keyboard::Left)) && (charPosX > 0))) { //Âëåâî
+		if (((Keyboard::isKeyPressed(Keyboard::Left)) && (charPosX > 0))) { //Ã‚Ã«Ã¥Ã¢Ã®
 			herosprite.move(-0.4, 0);
 			charPosX -= 0.4;
 		}
-		if ((Keyboard::isKeyPressed(Keyboard::Right)) && (charPosX < 860)) { 
+		if ((Keyboard::isKeyPressed(Keyboard::Right)) && (charPosX < 860)) {
 			herosprite.move(0.4, 0);
 			charPosX += 0.4;
 		}
-		
+
+		if (((Keyboard::isKeyPressed(Keyboard::Left)) && (BulletPosX > 0))) { //Ã‚Ã«Ã¥Ã¢Ã®
+			bulletsprite.move(-0.4, 0);
+			BulletPosX -= 0.4;
+		}
+		if ((Keyboard::isKeyPressed(Keyboard::Right)) && (BulletPosX < 860)) {
+			bulletsprite.move(0.4, 0);
+			BulletPosX += 0.4;
+		}
+
+		if ((Keyboard::isKeyPressed(Keyboard::Up))) {
+			bulletsprite.move(0., -1); // 1 Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ ÑÑ‚Ð¾ Ð³Ñ€Ð°Ð´ÑƒÑÑ‹, 2 Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ ÑÑ‚Ð¾ ÑÐºÐ¾Ñ€Ð¾ÑÑ‚ÑŒ.
+		}
 
 		window.clear();
-		if (Keyboard::isKeyPressed(Keyboard::Space)) {
+		
+		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 			window.draw(bulletsprite);
 		}
+
 		window.draw(text);
 		window.draw(line);
 		window.draw(herosprite);
@@ -186,8 +208,8 @@ int main()
 		window.draw(monstersprite4);
 		window.draw(monstersprite5);
 		window.display();
-
-	} // Êîíåö îêíà
+		  
+	} // ÃŠÃ®Ã­Ã¥Ã¶ Ã®ÃªÃ­Ã 
 
 	return 0;
-}
+} 
