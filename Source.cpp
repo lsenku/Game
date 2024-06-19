@@ -7,13 +7,37 @@
 
 using namespace sf;
 
-int main()
+const float WindowWidth = 1280.0;
+const float WindowHeigth = 800.0;
+float charPosX = 410.0;
+float PlanePosX = 410.0;
+float PosBulletX, PosBulletY;
+float BulletPosX = 440.0;
+float BulletPosY = 680.0;
+
+void shot(float x){
+	Image bulletimage; //èçîáðàæåíèå äëÿ ïóëè
+	bulletimage.loadFromFile("bullet.png"); //çàãðóçèëè êàðòèíêó â îáúåêò èçîáðàæåíèÿ
+	bulletimage.createMaskFromColor(Color(0, 0, 0)); //ìàñêà äëÿ ïóëè ïî ÷åðíîìó öâåòó
+
+	Texture bullettexture;
+	bullettexture.loadFromImage(bulletimage);
+
+	Sprite bulletsprite;
+	bulletsprite.setTexture(bullettexture);
+	bulletsprite.setTexture(bullettexture);
+	bulletsprite.setPosition(BulletPosX, BulletPosY);
+	bulletsprite.setScale(0.030, 0.030);
+
+	PosBulletX = bulletsprite.getPosition().x;
+	PosBulletY = bulletsprite.getPosition().y;
+
+	bulletsprite.move(0., -1);
+}
+
+int main()               
 { // Íà÷àëî îêíà
 
-	const float WindowWidth = 1280.0;
-	const float WindowHeigth = 800.0;
-	float charPosX = 410.0;
-	float PlanePosX = 410.0;
 
 	RenderWindow window(VideoMode(WindowWidth, WindowHeigth), "Galaga");
 
@@ -22,11 +46,6 @@ int main()
 	{
 
 	}
-
-	float BulletPosX = 440.0;
-	float BulletPosY = 680.0;
-
-
 
 	Text text;
 	text.setFont(font);
@@ -59,22 +78,7 @@ int main()
 	herosprite.setScale(0.13, 0.13);
 
 
-	//////////////////////////////////////////////////////////////////////////
-
-	Image bulletimage;//èçîáðàæåíèå äëÿ ïóëè
-	bulletimage.loadFromFile("bullet.png"); //çàãðóçèëè êàðòèíêó â îáúåêò èçîáðàæåíèÿ
-	bulletimage.createMaskFromColor(Color(0, 0, 0)); //ìàñêà äëÿ ïóëè ïî ÷åðíîìó öâåòó
-
-	Texture bullettexture;
-	bullettexture.loadFromImage(bulletimage);
-
-	Sprite bulletsprite;
-	bulletsprite.setTexture(bullettexture);
-	bulletsprite.setTexture(bullettexture);
-	bulletsprite.setPosition(BulletPosX, BulletPosY);
-	bulletsprite.setScale(0.030, 0.030);
-
-	
+	/////////////////////////////////////////////////////////////////////////
 
 	//////////////////////////////////////////////////////////////////
 
@@ -178,24 +182,17 @@ int main()
 			herosprite.move(0.4, 0);
 			charPosX += 0.4;
 		}
-
-		if (((Keyboard::isKeyPressed(Keyboard::Left)) && (BulletPosX > 0))) { //Âëåâî
-			bulletsprite.move(-0.4, 0);
-			BulletPosX -= 0.4;
+		while (((Keyboard::isKeyPressed(Keyboard::Space)))) {
+			shot(charPosX);
+			
 		}
-		if ((Keyboard::isKeyPressed(Keyboard::Right)) && (BulletPosX < 860)) {
-			bulletsprite.move(0.4, 0);
-			BulletPosX += 0.4;
-		}
-
-		if ((Keyboard::isKeyPressed(Keyboard::Up))) {
-			bulletsprite.move(0., -1); // 1 значение это градусы, 2 значение это скорость.
-		}
+		
+		
 
 		window.clear();
-		
-		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			window.draw(bulletsprite);
+
+		if (Keyboard::isKeyPressed(Keyboard::Space)) {
+			
 		}
 
 		window.draw(text);
@@ -208,8 +205,8 @@ int main()
 		window.draw(monstersprite4);
 		window.draw(monstersprite5);
 		window.display();
-		  
+
 	} // Êîíåö îêíà
 
 	return 0;
-} 
+}
